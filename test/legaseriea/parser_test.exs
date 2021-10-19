@@ -34,4 +34,17 @@ defmodule LegaSerieA.ParserTest do
       assert [] == LegaSerieA.Parser.find_match_box_by_team(url, "test")
     end
   end
+
+  describe "round_urls" do
+    @describetag url: "https://www.legaseriea.it/en/serie-a/fixture-and-results"
+    @describetag filename: "rounds_fixture.html"
+
+    test "return list of urls" do
+      assert [
+               "/en/serie-a/fixture-and-results/2021-22/UNICO/UNI/1",
+               "/en/serie-a/fixture-and-results/2021-22/UNICO/UNI/2",
+               "/en/serie-a/fixture-and-results/2021-22/UNICO/UNI/20"
+             ] == LegaSerieA.Parser.round_urls()
+    end
+  end
 end

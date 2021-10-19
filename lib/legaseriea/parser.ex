@@ -7,6 +7,17 @@ defmodule LegaSerieA.Parser do
 
   plug(Tesla.Middleware.BaseUrl, "https://www.legaseriea.it")
 
+  @spec round_urls :: list(binary()) | {:error, any}
+  def round_urls do
+    with {:ok, response} <- get("/en/serie-a/fixture-and-results"),
+         {:ok, document} <- Floki.parse_document(response.body),
+         round_nodes <- Floki.find(document, "#menu-giornate li:not(.nomegirone) a") do
+      round_nodes |> Floki.attribute("href")
+    else
+      error -> error
+    end
+  end
+
   @spec find_match_box_by_team(binary, binary) :: list
   def find_match_box_by_team(url, team_name) do
     with {:ok, response} <- get(url),
