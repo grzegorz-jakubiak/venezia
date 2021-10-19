@@ -18,8 +18,8 @@ defmodule LegaSerieA.Parser do
     end
   end
 
-  @spec find_match_box_by_team(binary, binary) :: list
-  def find_match_box_by_team(url, team_name) do
+  @spec find_match_by_team(binary, binary) :: list
+  def find_match_by_team(url, team_name) do
     with {:ok, response} <- get(url),
          {:ok, document} = Floki.parse_document(response.body),
          nodes <- Floki.find(document, ".box-partita") do
