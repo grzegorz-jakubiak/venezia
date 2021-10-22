@@ -14,6 +14,22 @@ defmodule LegaSerieA.ParserTest do
     {:ok, parsed_html: parsed_html}
   end
 
+  describe "match_details" do
+    @describetag filename: "matches_fixture.html"
+    @describetag url: "https://example.com"
+
+    test "returns match details struct", %{parsed_html: parsed_html} do
+      [box | _] = parsed_html |> Floki.find(".box-partita")
+
+      assert %{
+               date: "16/10/2021 15:00",
+               stadium: "ALBERTO PICCO (La Spezia)",
+               teams: ["Spezia", "Salernitana"],
+               score: [2, 1]
+             } == LegaSerieA.Parser.match_details(box)
+    end
+  end
+
   describe "find_match_by_team" do
     @describetag url: "https://example.com"
     @describetag filename: "matches_fixture.html"
