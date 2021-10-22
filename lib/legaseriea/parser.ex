@@ -23,26 +23,22 @@ defmodule LegaSerieA.Parser do
     with {:ok, response} <- get(url),
          {:ok, document} = Floki.parse_document(response.body),
          nodes <- Floki.find(document, ".box-partita") do
-      Enum.filter(nodes, &contains_text?(&1, team_name))
+      Enum.filter(nodes, &contains_substring?(&1, team_name))
     end
   end
 
-  defp contains_text?({_tag, _attributes, children}, text) do
-    case children do
-      [] ->
-        false
+  defp contains_substring?({_tag, _attributes, []}, _substring), do: false
 
-      [text_element | []] when is_binary(text_element) ->
-        contains_text?(text_element, text)
-
-      [_ | tail] ->
-        Enum.any?(tail, &contains_text?(&1, text))
+  defp contains_substring?({_tag, _attributes, [head | _]}, substring) when is_binary(head) do
+    contains_substring?(head, substring)
     end
-  end
 
-  defp contains_text?(text_element, text) when is_binary(text_element) do
-    text_element
+  defp contains_substring?({_tag, _attributes, [_ | tail]}, substring),
+    do: Enum.any?(tail, &contains_substring?(&1, substring))
+
+  defp contains_substring?(text, substring) do
+    text
     |> String.downcase()
-    |> String.contains?(String.downcase(text))
+    |> String.contains?(String.downcase(substring))
   end
 end
