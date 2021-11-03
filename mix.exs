@@ -13,7 +13,8 @@ defmodule Venezia.MixProject do
 
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger],
+      mod: {Venezia.Application, []}
     ]
   end
 
@@ -21,7 +22,8 @@ defmodule Venezia.MixProject do
     [
       {:tesla, "~> 1.4"},
       {:hackney, "~> 1.17"},
-      {:floki, "~> 0.31.0"}
+      {:floki, "~> 0.31.0"},
+      {:poolboy, "~> 1.5.2"}
     ]
   end
 end
