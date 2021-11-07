@@ -3,10 +3,10 @@ defmodule Venezia.Schedule do
 
   @timeout 10000
 
-  def get_schedule(team) do
+  def get(team) do
     LegaSerieA.Parser.round_urls()
     |> Enum.map(fn url -> async_get_match_details(url, team) end)
-    |> Enum.each(fn task -> await_and_inspect(task) end)
+    |> Enum.map(fn task -> await_and_inspect(task) end)
   end
 
     defp async_get_match_details(url, team) do
